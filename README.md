@@ -4,8 +4,8 @@ Run `npm install` and `npm run dev` to start the Vite development server.
 
 ## Manage projects in Neon
 
-1. Open the SQL Editor for your Neon database and run [database/projects.sql](database/projects.sql) to create the table and import the three existing projects.
-2. Put your Neon connection string in `.env.local` as `DATABASE_URL=postgresql://…`, then restart Vite. Keep this variable server-side. A role with SELECT access to the projects table is sufficient for the website.
-3. In Neon’s Tables view, insert a row into `portfolio_projects`. Set a unique `slug`, title, description, image URL or local public path, and technologies. Turn on `featured` to show it on the home page. Set `published` to false for drafts. Lower `sort_order` values appear first.
+1. Run `schema.sql` from Portfolio Studio in the Neon SQL Editor, using the same database and branch as the dashboard. For a fresh database, run [database/projects.sql](database/projects.sql) first if you want the three original SE projects.
+2. Set a server-side `DATABASE_URL` in `.env.local` for Vite or in the Node host for production. The portfolio role only needs `SELECT` on `public.portfolio_published_projects`.
+3. Use the private dashboard to choose where projects appear and set their order.
 
-For production, use `npm run build` followed by `npm start` on a Node host with `DATABASE_URL` set in the server environment. The server serves the site and `GET /api/projects` from the same origin. Set `PORT` if your host requires it. Static-only deployments display the bundled projects. The bundled projects also display when the API is unavailable.
+For production run `npm run build` followed by `npm start` on a Node host. The SE site reads `/api/projects`. QA-Portfolio can use `/api/projects?portfolio=qa` on the same host as its public feed. Both routes return published records assigned to the selected portfolio in dashboard order.
