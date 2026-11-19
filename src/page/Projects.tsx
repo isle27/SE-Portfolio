@@ -1,10 +1,9 @@
 import { Link } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { ProjectCard } from '../component/ProjectCard';
-import { projects } from './projectData';
+import { ProjectCard, type Project } from '../component/ProjectCard';
 import styles from './Home.module.css';
 
-export default function Projects() {
+export default function Projects({ projects }: { projects: Project[] }) {
   return <main className={styles.allProjectsPage}>
     <section className={styles.allProjectsHeader}>
       <Link to="/" className={styles.backHome}><ArrowBackIcon /> Back to home</Link>
@@ -13,7 +12,7 @@ export default function Projects() {
       <p>A selection of practical, thoughtful digital experiences.</p>
     </section>
     <section className={styles.allProjectsGrid}>
-      {projects.map((project) => <ProjectCard key={project.title} project={project} />)}
+      {projects.map((project) => <ProjectCard key={project.id ?? project.title} project={project} />)}
     </section>
   </main>;
 }

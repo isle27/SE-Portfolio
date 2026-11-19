@@ -1,73 +1,11 @@
-# React + TypeScript + Vite
+# Elsa Chanyalew’s portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Run `npm install` and `npm run dev` to start the Vite development server.
 
-Currently, two official plugins are available:
+## Manage projects in Neon
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. Open the SQL Editor for your Neon database and run [database/projects.sql](database/projects.sql) to create the table and import the three existing projects.
+2. Put your Neon connection string in `.env.local` as `DATABASE_URL=postgresql://…`, then restart Vite. Keep this variable server-side. A role with SELECT access to the projects table is sufficient for the website.
+3. In Neon’s Tables view, insert a row into `portfolio_projects`. Set a unique `slug`, title, description, image URL or local public path, and technologies. Turn on `featured` to show it on the home page. Set `published` to false for drafts. Lower `sort_order` values appear first.
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+For production, use `npm run build` followed by `npm start` on a Node host with `DATABASE_URL` set in the server environment. The server serves the site and `GET /api/projects` from the same origin. Set `PORT` if your host requires it. Static-only deployments display the bundled projects. The bundled projects also display when the API is unavailable.
