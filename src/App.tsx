@@ -7,7 +7,7 @@ import type { Project } from './component/ProjectCard';
 
 function App() {
   const [projects, setProjects] = useState<Project[]>([]);
-  const [loadError, setLoadError] = useState(false);
+  const [status, setStatus] = useState<'loading' | 'ready' | 'unavailable'>('loading');
 
   useEffect(() => {
     const controller = new AbortController();
@@ -19,9 +19,10 @@ function App() {
       .then((data) => {
         if (!Array.isArray(data)) throw new Error('Invalid projects response');
         setProjects(data);
+        setStatus('ready');
       })
       .catch(() => {
-        if (!controller.signal.aborted) setLoadError(true);
+        if (!controller.signal.aborted) setStatus('unavailable');
       });
     return () => controller.abort();
   }, []);
@@ -29,10 +30,9 @@ function App() {
   return (
     <BrowserRouter>
       <Navbar />
-      {loadError && <p role="status">Projects are temporarily unavailable.</p>}
       <Routes>
-        <Route path="/" element={<Home projects={projects} />} />
-        <Route path="/projects" element={<Projects projects={projects} />} />
+        <Route path="/" element={<Home projects={projects} status={status} />} />
+        <Route path="/projects" element={<Projects projects={projects} status={status} />} />
       </Routes>
     </BrowserRouter>
   );
